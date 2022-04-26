@@ -36,19 +36,19 @@ var wall = {
 var mud = {
     name: 'mud',
     color: 'brown',
-    value: 0.5,
+    value: 2,
     through: true
 };
 
 var trap = {
     name: 'trap',
     color: 'red',
-    value: 0.9,
+    value: 3,
     through: true
 }
-var path = {
+var pathing = {
     name: 'path',
-    color: 'plum2',
+    color: "purple",
     value: 0,
     through: true
 }
@@ -236,10 +236,14 @@ function startSearchPath(){
     easystar.findPath(start.x, start.y, end.x, end.y, function(path){
         console.log(path);
         if(path == null){
-            easystar.setAcceptableTiles([0,0.5]);
+            console.log( '2eme boucle ')
+            easystar.setAcceptableTiles([0,2]);
+            console.log( '2eme boucle / 2')
             easystar.findPath(start.x, start.y, end.x, end.y, function(path){
+                console.log('2eme / 3')
                 if(path == null){
-                    easystar.setAcceptableTiles([0, 0.5, 0.9]);
+                    console.log( '3eme boucle ')
+                    easystar.setAcceptableTiles([0, 0.5, 3]);
                     easystar.findPath(start.x, start.y, end.x, end.y, function(path){
                         if(path == null){
                             alert("Path was not found.");
@@ -253,7 +257,7 @@ function startSearchPath(){
             colored_path.shift();
             colored_path.pop();
             for(el of colored_path){
-                ctx.fillStyle = path.color;
+                ctx.fillStyle = pathing.color;
                 ctx.fillRect((el.x*50)+1, (el.y*50)+1, 48, 48);
             }
 
