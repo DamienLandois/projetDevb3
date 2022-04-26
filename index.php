@@ -23,6 +23,7 @@
         <button onclick="setType('empty')">vider</button>
         <br><br>
         <button onclick="startSearchPath()">Lancer le Test</button>
+        <button onclick="refreshMap()">Refresh</button>
     </div>
     <br><br>
     <div>

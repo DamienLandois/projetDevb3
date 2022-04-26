@@ -112,6 +112,10 @@ function reload(sauvegarde, start, end){
         g_start.set = true
         g_start.x = start.x;
         g_start.y = start.y;
+    } else {
+        g_start.set = false;
+        g_start.x = undefined;
+        g_start.y = undefined;
     }
 
     end = JSON.parse(end);
@@ -119,19 +123,28 @@ function reload(sauvegarde, start, end){
         g_end.set = true;
         g_end.x = end.x;
         g_end.y = end.y;
+    } else {
+        g_end.set = false;
+        g_end.x = undefined;
+        g_end.y = undefined;
     }
-
-    setUpCanvas();
     grid = JSON.parse(sauvegarde);
+
+    refreshMap();
+
+
+};
+
+function refreshMap(){
+    setUpCanvas();
+
     for(x in grid){
         for(y in grid[x]){
             ctx.fillStyle = grid[x][y].color;
             ctx.fillRect((x*50)+1, (y*50)+1, 48, 48);
         }
     }
-
-
-};
+}
 
 function load_list(){
     $.ajax({
