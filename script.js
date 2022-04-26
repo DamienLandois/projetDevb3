@@ -46,6 +46,12 @@ var trap = {
     value: 0.9,
     through: true
 }
+var path = {
+    name: 'path',
+    color: 'plum2',
+    value: 0,
+    through: true
+}
 var type = 'empty';
 
 var canvas = document.getElementById('leCanvas');
@@ -245,6 +251,14 @@ function startSearchPath(){
             })
         }
         else {
+            let colored_path = path;
+            colored_path.shift();
+            colored_path.pop();
+            for(el of colored_path){
+                ctx.fillStyle = path.color;
+                ctx.fillRect((el.x*50)+1, (el.y*50)+1, 48, 48);
+            }
+
             alert("Path was found. The first Point is " + path[0].x + " " + path[0].y);
         }
     } )
