@@ -236,11 +236,9 @@ function startSearchPath(){
     for(let ii=0; ii < grid_pathfinding.length; ii++){
         grid_pathfinding[ii] = new Array(12);
         for(let jj=0; jj < grid_pathfinding[ii].length; jj++){
-            grid_pathfinding[ii][jj] =  grid[ii][jj].value;
+            grid_pathfinding[ii][jj] =  grid[jj][ii].value;
         }
     }
-    console.log(start.x);
-    console.log(start.y);
     easystar.setGrid(grid_pathfinding);
     console.log(grid_pathfinding);
     easystar.setAcceptableTiles([0]);
