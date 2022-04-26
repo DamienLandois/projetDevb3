@@ -82,7 +82,6 @@ function setUpCanvas() {
     ctx.moveTo(0, h);
     ctx.lineTo(canvas.width, h);
     }
-
     for(var w = ecart ; w < canvas.width ; w += ecart) {
     ctx.moveTo(w, 0);
     ctx.lineTo(w, canvas.height);
