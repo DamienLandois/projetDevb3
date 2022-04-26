@@ -277,28 +277,27 @@ function startSearchPath(){
     easystar.setGrid(grid_pathfinding);
     console.log(grid_pathfinding);
 
-
     const acceptableTiles = [0, 2, 3];
-    var v_path = null;
+    let colored_path = null;
     for(let step in acceptableTiles) {
-        if(v_path === null){
-            if(step == 0) {
-                console.log("start");
-                easystar.setAcceptableTiles([0]);
-            } else if(step == 1) {
-                console.log("start!2");
-                easystar.setAcceptableTiles([0,2]);
-            } else if(step == 2) {
-                console.log("start!3");
-                easystar.setAcceptableTiles([0,2,3]);
-            }
-            easystar.findPath(g_start.x, g_start.y, g_end.x, g_end.y, function( path ) {
-                if (path === null) {
-                    console.log("Path was not found.");
-                } else {
+        if(step == 0) {
+            console.log("start");
+            easystar.setAcceptableTiles([0]);
+        } else if(step == 1) {
+            console.log("start!2");
+            easystar.setAcceptableTiles([0,2]);
+        } else if(step == 2) {
+            console.log("start!3");
+            easystar.setAcceptableTiles([0,2,3]);
+        }
+        easystar.findPath(g_start.x, g_start.y, g_end.x, g_end.y, function( path ) {
+            if (path === null) {
+                console.log("Path was not found.");
+            } else {
+                if(colored_path === null){
                     console.log("Path was found.");
                     console.log(path);
-                    let colored_path = path;
+                    colored_path = path;
                     colored_path.shift();
                     colored_path.pop();
                     for(el of colored_path){
@@ -306,16 +305,16 @@ function startSearchPath(){
                         ctx.fillRect((el.x*50)+1, (el.y*50)+1, 48, 48);
                     }
                     alert("Path was found. The first Point is " + path[0].x + " " + path[0].y);
-                    v_path = path;
                 }
-    
-            });
-    
-            easystar.setIterationsPerCalculation(1000);
-            easystar.calculate();
-        }
-        
+            }
+
+        });
+
+        easystar.setIterationsPerCalculation(1000);
+        easystar.calculate();
     }
+        
+
 
     // easystar.setAcceptableTiles([0]);
     // easystar.findPath(g_start.x, g_start.y, g_end.x, g_end.y, function(path){
