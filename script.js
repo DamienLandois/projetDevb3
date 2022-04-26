@@ -1,54 +1,55 @@
 var easystar = new EasyStar.js();
 
-
-var start = {
+var g_start = {
     name: 'start',
     set: false,
     x: undefined,
     y: undefined,
     color: 'yellow',
-    value: 0,
+    speed: 1,
+    through: true
 }
 
-var end = {
+var g_end = {
     name: 'end',
     set: false,
     x: undefined,
     y: undefined,
     color: 'green',
-    value: 0,
-}
-
-var empty = {
-    name: 'empty',
-    color: 'white',
-    value: 0,
+    speed: 1,
     through: true
 }
 
-var wall = {
+var g_empty = {
+    name: 'empty',
+    color: 'white',
+    speed: 1,
+    through: true
+}
+
+var g_wall = {
     name: 'wall',
     color: 'black',
-    value: 1,
+    speed: 0,
     through: false
 };
 
-var mud = {
+var g_mud = {
     name: 'mud',
     color: 'brown',
-    value: 0.5,
+    speed: 0.5,
     through: true
 };
 
-var trap = {
+var g_trap = {
     name: 'trap',
     color: 'red',
-    value: 0.9,
+    speed: 0.1,
     through: true
 }
-var path = {
+var g_path = {
     name: 'path',
-    color: 'plum2',
+    color: 'purple',
     value: 0,
     through: true
 }
@@ -61,7 +62,7 @@ var grid = new Array(12);
 for(let ii=0; ii < grid.length; ii++){
     grid[ii] = new Array(12);
     for(let jj=0; jj < grid[ii].length; jj++){
-        grid[ii][jj] = empty;
+        grid[ii][jj] = g_empty;
     }
 }
 
@@ -92,6 +93,7 @@ function setUpCanvas() {
     ctx.moveTo(0, h);
     ctx.lineTo(canvas.width, h);
     }
+
     for(var w = ecart ; w < canvas.width ; w += ecart) {
     ctx.moveTo(w, 0);
     ctx.lineTo(w, canvas.height);
@@ -103,7 +105,7 @@ function setType (type_selected) {
     type = type_selected;
 };
 
-function reload(sauvegarde){
+function reload(sauvegarde, start, end){
 
     setUpCanvas();
     grid = JSON.parse(sauvegarde);
@@ -131,7 +133,7 @@ function load_list(){
                 let span = document.createElement('span');
                 span.innerHTML = el.Nom+" créée par "+el.Createur;
                 let button = document.createElement('button');
-                button.onclick = function(event){reload(el.Composition);}
+                button.onclick = function(event){reload(el.Composition, el.start, el.end);}
                 var texte = document.createTextNode("Charger");
 
                 button.appendChild(texte);
@@ -147,6 +149,8 @@ function load_list(){
 
 function save() {
     let json_grid = JSON.stringify(grid);
+    let json_start = JSON.stringify({x: g_start.x, y: g_start.y});
+    let json_end = JSON.stringify({x: g_end.x, y: g_end.y});
 
     console.log("save");
     $.ajax({
@@ -156,6 +160,8 @@ function save() {
             name: document.getElementById("name").value,
             creator: document.getElementById("creator").value,
             data: json_grid,
+            start: json_start,
+            end: json_end
         },
         success: function(response){
             if(response == false){
@@ -173,44 +179,44 @@ window.onload = function () {
         console.log(type)
         switch(type){
             case 'start':
-                if(start.set == true){
-                    if(grid[start.x][start.y] == start){
-                        ctx.fillStyle= empty.color;
-                        ctx.fillRect((start.x*50)+1, (start.y*50)+1, 48, 48);
-                        grid[start.x][start.y] = empty;
+                if(g_start.set == true){
+                    if(grid[g_start.x][g_start.y] == g_start){
+                        ctx.fillStyle= g_empty.color;
+                        ctx.fillRect((g_start.x*50)+1, (g_start.y*50)+1, 48, 48);
+                        grid[g_start.x][g_start.y] = g_empty;
                     }
                 } else {
-                    start.set = true;
+                    g_start.set = true;
                 }
-                start.x = x;
-                start.y = y;
-                obj = start;
+                g_start.x = x;
+                g_start.y = y;
+                obj = g_start;
                 break;
             case 'end':
-                if(end.set == true){
-                    if(grid[end.x][end.y] == end){
-                        ctx.fillStyle= empty.color;
-                        ctx.fillRect((end.x*50)+1, (end.y*50)+1, 48, 48);
-                        grid[end.x][end.y] = empty;
+                if(g_end.set == true){
+                    if(grid[g_end.x][g_end.y] == g_end){
+                        ctx.fillStyle= g_empty.color;
+                        ctx.fillRect((g_end.x*50)+1, (g_end.y*50)+1, 48, 48);
+                        grid[g_end.x][g_end.y] = g_empty;
                     }
                 } else {
-                    end.set = true;
+                    g_end.set = true;
                 }
-                end.x = x;
-                end.y = y;
-                obj = end;
+                g_end.x = x;
+                g_end.y = y;
+                obj = g_end;
                 break;
             case 'empty':
-                obj = empty;
+                obj = g_empty;
                 break;
             case 'wall':
-                obj = wall;
+                obj = g_wall;
                 break;
             case 'mud':
-                obj = mud;
+                obj = g_mud;
                 break;
             case 'trap':
-                obj = trap;
+                obj = g_trap;
                 break;                                          
         }
 
@@ -221,6 +227,9 @@ window.onload = function () {
 
     load_list();
 };
+
+
+
 
 function startSearchPath(){
     var grid_pathfinding = new Array(12);
@@ -235,14 +244,14 @@ function startSearchPath(){
     easystar.setGrid(grid_pathfinding);
     console.log(grid_pathfinding);
     easystar.setAcceptableTiles([0]);
-    easystar.findPath(start.x, start.y, end.x, end.y, function(path){
+    easystar.findPath(g_start.x, g_start.y, g_end.x, g_end.y, function(path){
         console.log(path);
         if(path == null){
             easystar.setAcceptableTiles([0,0.5]);
-            easystar.findPath(start.x, start.y, end.x, end.y, function(path){
+            easystar.findPath(g_start.x, g_start.y, g_end.x, g_end.y, function(path){
                 if(path == null){
                     easystar.setAcceptableTiles([0, 0.5, 0.9]);
-                    easystar.findPath(start.x, start.y, end.x, end.y, function(path){
+                    easystar.findPath(g_start.x, g_start.y, g_end.x, g_end.y, function(path){
                         if(path == null){
                             alert("Path was not found.");
                         }
@@ -255,7 +264,7 @@ function startSearchPath(){
             colored_path.shift();
             colored_path.pop();
             for(el of colored_path){
-                ctx.fillStyle = path.color;
+                ctx.fillStyle = g_path.color;
                 ctx.fillRect((el.x*50)+1, (el.y*50)+1, 48, 48);
             }
 
