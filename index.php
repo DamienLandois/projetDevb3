@@ -24,8 +24,9 @@
         <br><br>
         <button onclick="startSearchPath()">Lancer le Test</button>
     </div>
-
+    <br><br>
     <div>
+        <p>Sauvegarde</p>
         <label>Nom:</label><input type="text" id="name">
         <label>Créateur:</label><input type="text" id="creator">
         <button onclick="save()">Valider</button>
