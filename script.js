@@ -1,10 +1,13 @@
+var easystar = new EasyStar.js();
+
 
 var start = {
     name: 'start',
     set: false,
     x: undefined,
     y: undefined,
-    color: 'yellow'
+    color: 'yellow',
+    value: 0,
 }
 
 var end = {
@@ -12,34 +15,35 @@ var end = {
     set: false,
     x: undefined,
     y: undefined,
-    color: 'green'
+    color: 'green',
+    value: 0,
 }
 
 var empty = {
     name: 'empty',
     color: 'white',
-    speed: 1,
+    value: 0,
     through: true
 }
 
 var wall = {
     name: 'wall',
     color: 'black',
-    speed: 0,
+    value: 1,
     through: false
 };
 
 var mud = {
     name: 'mud',
     color: 'brown',
-    speed: 0.5,
+    value: 0.5,
     through: true
 };
 
 var trap = {
     name: 'trap',
     color: 'red',
-    speed: 0.1,
+    value: 0.9,
     through: true
 }
 var type = 'empty';
@@ -212,7 +216,41 @@ window.onload = function () {
     load_list();
 };
 
-
+function startSearchPath(){
+    var grid_pathfinding = new Array(12);
+    for(let ii=0; ii < grid_pathfinding.length; ii++){
+        grid_pathfinding[ii] = new Array(12);
+        for(let jj=0; jj < grid_pathfinding[ii].length; jj++){
+            grid_pathfinding[ii][jj] =  grid[ii][jj].value;
+        }
+    }
+    console.log(start.x);
+    console.log(start.y);
+    easystar.setGrid(grid_pathfinding);
+    console.log(grid_pathfinding);
+    easystar.setAcceptableTiles([0]);
+    easystar.findPath(start.x, start.y, end.x, end.y, function(path){
+        console.log(path);
+        if(path == null){
+            easystar.setAcceptableTiles([0,0.5]);
+            easystar.findPath(start.x, start.y, end.x, end.y, function(path){
+                if(path == null){
+                    easystar.setAcceptableTiles([0, 0.5, 0.9]);
+                    easystar.findPath(start.x, start.y, end.x, end.y, function(path){
+                        if(path == null){
+                            alert("Path was not found.");
+                        }
+                    })
+                }
+            })
+        }
+        else {
+            alert("Path was found. The first Point is " + path[0].x + " " + path[0].y);
+        }
+    } )
+    easystar.setIterationsPerCalculation(1000);
+    easystar.calculate();
+}
 
 
 

@@ -21,6 +21,8 @@
         <button onclick="setType('mud')">boue</button>
         <button onclick="setType('trap')">piège</button>
         <button onclick="setType('empty')">vider</button>
+        <br><br>
+        <button onclick="startSearchPath()">Lancer le Test</button>
     </div>
 
     <div>
@@ -33,6 +35,7 @@
     <div id="liste">
         <p>Liste des Maps :</p>
     </div>
+    <script src="easystar.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
