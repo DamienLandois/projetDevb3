@@ -22,15 +22,21 @@ switch($crud){
                 if($_POST['data']){
                     $data = $_POST['data'];
                 }
+                if($_POST['start']){
+                    $start = $_POST['start'];
+                }
+                if($_POST['end']){
+                    $end = $_POST['end'];
+                }
 
                 $sql = '
                     INSERT INTO cartes
-                    (Nom, Createur, Composition)
+                    (Nom, Createur, Composition, start, end)
                     VALUES
-                    (?, ?, ?)
+                    (?, ?, ?, ?, ?)
                 ';
 
-                $query = sql_execute($sql, array($name, $creator, $data));
+                $query = sql_execute($sql, array($name, $creator, $data, $start, $end));
 
                 echo json_encode($query);
 

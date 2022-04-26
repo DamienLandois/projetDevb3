@@ -106,7 +106,15 @@ function setType (type_selected) {
 };
 
 function reload(sauvegarde, start, end){
-
+    start = JSON.parse(start);
+    console.log(start)
+    g_start.x = start.x;
+    g_start.y = start.y;
+    end = JSON.parse(end);
+    console.log(end)
+    g_end.x = end.x;
+    g_end.y = end.y;
+    
     setUpCanvas();
     grid = JSON.parse(sauvegarde);
     for(x in grid){
@@ -278,17 +286,3 @@ function startSearchPath(){
 
 
 
-
-
-
-
-
-
-
-
-var test = new Array(12);
-for(let ii=0; ii < test.length; ii++){
-    test[ii] = new Array(12);
-    test[ii][5] = wall; 
-    console.log(ii)
-}
