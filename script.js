@@ -6,7 +6,7 @@ var g_start = {
     x: undefined,
     y: undefined,
     color: 'yellow',
-    speed: 1,
+    value: 0,
     through: true
 }
 
@@ -16,35 +16,35 @@ var g_end = {
     x: undefined,
     y: undefined,
     color: 'green',
-    speed: 1,
+    value: 0,
     through: true
 }
 
 var g_empty = {
     name: 'empty',
     color: 'white',
-    speed: 1,
+    value: 0,
     through: true
 }
 
 var g_wall = {
     name: 'wall',
     color: 'black',
-    speed: 0,
+    value: 1,
     through: false
 };
 
 var g_mud = {
     name: 'mud',
     color: 'brown',
-    speed: 0.5,
+    value: 0.5,
     through: true
 };
 
 var g_trap = {
     name: 'trap',
     color: 'red',
-    speed: 0.1,
+    value: 0.9,
     through: true
 }
 var g_path = {
