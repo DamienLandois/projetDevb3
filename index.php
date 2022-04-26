@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <title>Oui</title>
+    <title>Pathfinder</title>
 </head>
 <body>
     <canvas id="leCanvas" width="600" height="600">
@@ -23,9 +23,11 @@
         <button onclick="setType('empty')">vider</button>
         <br><br>
         <button onclick="startSearchPath()">Lancer le Test</button>
+        <button onclick="refreshMap()">Refresh</button>
     </div>
-
+    <br><br>
     <div>
+        <p>Sauvegarde</p>
         <label>Nom:</label><input type="text" id="name">
         <label>Créateur:</label><input type="text" id="creator">
         <button onclick="save()">Valider</button>

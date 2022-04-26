@@ -106,18 +106,45 @@ function setType (type_selected) {
 };
 
 function reload(sauvegarde, start, end){
+    console.log(start)
+    start = JSON.parse(start);
+    if(typeof start.x !== 'undefined'){
+        g_start.set = true
+        g_start.x = start.x;
+        g_start.y = start.y;
+    } else {
+        g_start.set = false;
+        g_start.x = undefined;
+        g_start.y = undefined;
+    }
 
-    setUpCanvas();
+    end = JSON.parse(end);
+    if(typeof end.x !== 'undefined'){
+        g_end.set = true;
+        g_end.x = end.x;
+        g_end.y = end.y;
+    } else {
+        g_end.set = false;
+        g_end.x = undefined;
+        g_end.y = undefined;
+    }
     grid = JSON.parse(sauvegarde);
+
+    refreshMap();
+
+
+};
+
+function refreshMap(){
+    setUpCanvas();
+
     for(x in grid){
         for(y in grid[x]){
             ctx.fillStyle = grid[x][y].color;
             ctx.fillRect((x*50)+1, (y*50)+1, 48, 48);
         }
     }
-
-
-};
+}
 
 function load_list(){
     $.ajax({
@@ -126,20 +153,28 @@ function load_list(){
         data: {
         },
         success: function(response) {
-            console.log(response)
+            //console.log(response)
             response = JSON.parse(response);
-            for(el of response){
+            for(let el of response){
+                console.log(el)
+
                 let div = document.createElement('div');
                 let span = document.createElement('span');
                 span.innerHTML = el.Nom+" créée par "+el.Createur;
-                let button = document.createElement('button');
-                button.onclick = function(event){reload(el.Composition, el.start, el.end);}
+                let newButton = document.createElement('button');
+                newButton.setAttribute('id', el.ID);
                 var texte = document.createTextNode("Charger");
 
-                button.appendChild(texte);
+                newButton.appendChild(texte);
                 div.appendChild(span);
-                div.appendChild(button);
+                div.appendChild(newButton);
                 document.getElementById('liste').appendChild(div);
+
+
+                console.log(document.getElementById(el.ID))
+
+                document.getElementById(el.ID).addEventListener('click', function(event){reload(el.Composition, el.start, el.end);})
+
 
             }
         }
@@ -236,7 +271,7 @@ function startSearchPath(){
     for(let ii=0; ii < grid_pathfinding.length; ii++){
         grid_pathfinding[ii] = new Array(12);
         for(let jj=0; jj < grid_pathfinding[ii].length; jj++){
-            grid_pathfinding[ii][jj] =  grid[jj][ii].value;
+            grid_pathfinding[ii][jj] = grid[jj][ii].value;
         }
     }
     easystar.setGrid(grid_pathfinding);
